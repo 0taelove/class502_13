@@ -1,5 +1,7 @@
 package exam01;
 
+import java.sql.SQLOutput;
+
 public class Ex06 {
     public static void main(String[] args) {
         int total = 0;
@@ -11,7 +13,11 @@ public class Ex06 {
 
             total += i;
             System.out.println("j:" + j);
-            //  for ( ; ; ) { } == while(true) { ... }
+
         }
+
+        System.out.println("합계: " + total);
     }
+
+    // for ( ; ; ) { } == while(true) { ... }
 }
