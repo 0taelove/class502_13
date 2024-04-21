@@ -1,11 +1,19 @@
 package exam01;
 
+import java.util.Arrays;
+
 public class Q6 {
     public static void main(String[] args) {
-        int[] i = {20, 30, 15, 9};
+        int[] nums = {21, 22, 30, 11, 99, 31};
+        // int index = nums.length -2 -1;
 
-        for (int j = 0; j < 4 / 2; j++) {
-            System.out.println([j]);
+        for (int i = 0; i < nums.length / 2; i++) {
+            int index = nums.length -i -1;
+            int temp = nums[i];
+            nums[i] = nums[index];
+            nums[index] = temp;
         }
+
+        System.out.println(Arrays.toString(nums));
     }
 }
