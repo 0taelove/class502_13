@@ -15,6 +15,5 @@ public class StarBucks extends AbstractCoffeeShop {
 
     public StarBucks() {
         super("스타벅스", menus);
-
     }
 }
