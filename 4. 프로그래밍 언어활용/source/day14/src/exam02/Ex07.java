@@ -5,7 +5,7 @@ import java.util.function.IntUnaryOperator;
 
 public class Ex07 {
     public static void main(String[] args) {
-        int[] nums = { 10, 20, 30, 40, 50};
+        int[] nums = { 10, 20, 30, 40, 50 };
         int[] nums2 = map(nums, new IntUnaryOperator() {
 
             @Override
