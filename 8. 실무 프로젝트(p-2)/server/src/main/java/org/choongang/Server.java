@@ -28,7 +28,11 @@ public class Server {
     public Server() {
 
         try {
-            serverSocket = new ServerSocket(9999);
+            // 환경변수 port
+            String _port = System.getenv("port");
+            int port = _port == null || _port.isBlank() ? 9999 : Integer.parseInt(_port);
+
+            serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -188,6 +192,10 @@ public class Server {
 
                 String message = clients.keySet().stream().collect(Collectors.joining("||"));
                 data.setMessage(message);
+
+                Socket s = clients.get(to);
+                output(s, data);
+
             } else if (to.equals("request_exit")) { // 접속 종료
                 String from = data.getFrom();
                 Socket s = clients.get(from);

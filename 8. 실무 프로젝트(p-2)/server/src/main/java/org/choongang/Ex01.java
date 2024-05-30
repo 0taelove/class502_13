@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Ex01 {
     public static void main(String[] args) throws Exception {
-        Socket socket = new Socket("127.0.0.1", 9999);
+        Socket socket = new Socket("127.0.0.1", 3000);
         Scanner sc = new Scanner(System.in);
 
         ObjectMapper om = new ObjectMapper();
@@ -37,14 +37,11 @@ public class Ex01 {
                 System.out.print("메세지: ");
                 String message = sc.nextLine();
 
-                SocketData data = new SocketData("user01", "request_users", message, LocalDateTime.now());
+                SocketData data = new SocketData("user01", "all", message, LocalDateTime.now());
                 String json = om.writeValueAsString(data);
 
                 dos.writeUTF(json);
             }
         }
-
-
-
     }
 }
