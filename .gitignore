@@ -1,6 +1,7 @@
-.idea/
 /docs
+.idea/
 *.iml
 /dbeaver
 /apache-maven-*
 /gradle-*
+/apache-tomcat-*
