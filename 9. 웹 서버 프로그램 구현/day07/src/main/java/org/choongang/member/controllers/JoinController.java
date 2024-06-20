@@ -7,10 +7,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.choongang.global.exceptions.CommonException;
 import org.choongang.member.services.JoinService;
 import org.choongang.member.services.MemberServiceProvider;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet("/member/join")
 public class JoinController extends HttpServlet {
@@ -26,6 +28,16 @@ public class JoinController extends HttpServlet {
     // doGet에서 날아온 데이터 -> service를 doPost에 추가
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            JoinService service = MemberServiceProvider.getInstance().joinService();
+            service.process(req);
+        } catch (CommonException e) {
+            // 브라우저에게 contentType 형식을 알려줘야 됨
+            resp.setContentType("text/html; charset=UTF-8");
+            resp.setStatus(e.getStatus());
+            PrintWriter out = resp.getWriter();
+            out.printf("<script>alert('%s');</script>", e.getMessage());
+        }
         JoinService service = MemberServiceProvider.getInstance().joinService();
 
         // 매개변수로 req 사용 -> 실제 요청데이터는 req에 있으니 가공해서 사용하겠다는 의미
