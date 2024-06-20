@@ -6,6 +6,7 @@ import org.choongang.global.validators.RequiredValidator;
 import org.choongang.global.validators.Validator;
 import org.choongang.member.entities.Member;
 import org.choongang.member.mapper.MemberMapper;
+import org.mindrot.jbcrypt.BCrypt;
 
 // http프로토콜의 request정보를 서블릿에게 전달하기 위해 사용
 // 필수 항목 검증 인터페이스 RequiredValidator 구현
@@ -32,5 +33,9 @@ public class LoginValidator implements Validator<HttpServletRequest>, RequiredVa
         String message = "이메일 또는 비밀번호가 일치하지 않습니다.";
         Member member = mapper.get(email);
         checkTrue(member != null, new BadRequestException(message));
+
+        // 비밀번호 일치 여부 체크
+        boolean isMatched = BCrypt.checkpw(password, member.getPassword());
+        checkTrue(isMatched, new BadRequestException(message));
     }
 }
