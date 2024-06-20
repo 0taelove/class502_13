@@ -45,7 +45,7 @@ public class JoinService {
 
     // MVC 연동하는 작업(DTO 변환 작업)
     public void process(HttpServletRequest request) {
-        //Objects.requiredNonNullElse(객체, null일 때 기본값);
+        // Objects.requiredNonNullElse(객체, null일때 기본값);
         String _termsAgree = Objects.requireNonNullElse(request.getParameter("termsAgree"), "false");
         boolean termsAgree = Boolean.parseBoolean(_termsAgree);
 
@@ -56,5 +56,7 @@ public class JoinService {
                 .userName(request.getParameter("userName"))
                 .termsAgree(termsAgree)
                 .build();
+
+        process(form);
     }
 }
