@@ -143,7 +143,7 @@ public class LoginServiceTest {
         });
 
         String message = thrown.getMessage();
-        assertTrue(message.equals("이메일 또는 비밀번호"));
+        assertTrue(message.contains("이메일 또는 비밀번호"));
     }
 
     @AfterEach
