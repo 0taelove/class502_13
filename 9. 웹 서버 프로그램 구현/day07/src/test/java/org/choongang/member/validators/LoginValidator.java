@@ -31,6 +31,6 @@ public class LoginValidator implements Validator<HttpServletRequest>, RequiredVa
         // 이메일로 회원이 조회되는지 검증
         String message = "이메일 또는 비밀번호가 일치하지 않습니다.";
         Member member = mapper.get(email);
-        checkTrue(member != null, new BadRequestException());
+        checkTrue(member != null, new BadRequestException(message));
     }
 }
