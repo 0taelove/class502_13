@@ -134,6 +134,18 @@ public class LoginServiceTest {
         assertTrue (message.contains("이메일 또는 비밀번호"));
     }
 
+    @Test
+    @DisplayName("비밀번호 검증, 검증 실패시 BadRequestException")
+    void passwordCheckTest() {
+        setParam("password", "***" + form.getPassword());
+        BadRequestException thrown = assertThrows(BadRequestException.class, () -> {
+            loginService.process(request);
+        });
+
+        String message = thrown.getMessage();
+        assertTrue(message.equals("이메일 또는 비밀번호"));
+    }
+
     @AfterEach
     void destroy() {
         dbsession.rollback();
