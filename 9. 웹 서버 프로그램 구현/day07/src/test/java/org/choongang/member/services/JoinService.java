@@ -1,4 +1,4 @@
-package org.choongang.member.servies;
+package org.choongang.member.services;
 
 import org.choongang.global.exceptions.BadRequestException;
 import org.choongang.global.validators.Validator;
@@ -10,7 +10,6 @@ import org.mindrot.jbcrypt.BCrypt;
 // 회원 가입 기능
 public class JoinService {
 
-    // 역전의존원칙
     private Validator<RequestJoin> validator;
     private MemberMapper mapper;
 
@@ -37,7 +36,6 @@ public class JoinService {
         int result = mapper.register(member);
         if (result < 1) {
             throw new BadRequestException("회원가입에 실패하였습니다.");
-
         }
 
     }

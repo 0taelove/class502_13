@@ -4,7 +4,6 @@ package org.choongang.global.validators;
 // 값이 있는지 없는지 체크
 public interface RequiredValidator {
     default void checkRequired(String str, RuntimeException e) {
-        System.out.println("str=" + str);
         if (str == null || str.isBlank()) {
             throw e;
         }

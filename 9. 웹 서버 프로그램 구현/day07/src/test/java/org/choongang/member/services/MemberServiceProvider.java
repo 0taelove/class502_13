@@ -1,4 +1,4 @@
-package org.choongang.member.servies;
+package org.choongang.member.services;
 
 import org.apache.ibatis.session.SqlSession;
 import org.choongang.global.configs.DBConn;
@@ -12,8 +12,8 @@ public class MemberServiceProvider {
 
     private MemberServiceProvider() {}
 
+    // 기능, instance가 null일 때 1번만 객체 생성
     public static MemberServiceProvider getInstance() {
-        // 기능, instance가 null일 때 1번만 객체 생성
         if (instance == null) {
             instance = new MemberServiceProvider();
         }
@@ -31,7 +31,7 @@ public class MemberServiceProvider {
         return new JoinValidator(memberMapper());
     }
 
-    public JoinService joinService() {
-        return new JoinService(joinValidator(), memberMapper());
+    public org.choongang.member.services.JoinService joinService() {
+        return new org.choongang.member.services.JoinService(joinValidator(), memberMapper());
     }
 }

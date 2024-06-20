@@ -24,7 +24,7 @@ public class JoinValidator implements Validator<RequestJoin>, RequiredValidator,
         String password = form.getPassword();
         String confirmPassword = form.getConfirmPassword();
         String userName = form.getUserName();
-        boolean termsAgree = form.isTermsAgree(); // 체크 여부
+        boolean termsAgree = form.isTermsAgree();
 
         /* 필수 항목 검증 - 이메일, 비밀번호, 비밀번호 확인, 회원명, 약관 동의 */
         checkRequired(email, new BadRequestException("이메일을 입력하세요."));
@@ -38,7 +38,7 @@ public class JoinValidator implements Validator<RequestJoin>, RequiredValidator,
 
         // 이메일 형식 체크
         if (!checkEmail(email)) {
-            throw new BadRequestException(("이메일 형식이 아닙니다."));
+            throw new BadRequestException("이메일 형식이 아닙니다.");
         }
 
         // 비밀번호 자리수 체크

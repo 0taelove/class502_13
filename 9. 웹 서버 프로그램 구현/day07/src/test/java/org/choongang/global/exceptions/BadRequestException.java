@@ -3,6 +3,7 @@ package org.choongang.global.exceptions;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class BadRequestException extends CommonException {
+
     public BadRequestException() {
         this("잘못된 요청입니다.");
     }

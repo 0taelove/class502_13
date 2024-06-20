@@ -1,14 +1,14 @@
 package org.choongang.member.tests;
 
 import com.github.javafaker.Faker;
-import org.apache.ibatis.javassist.bytecode.DuplicateMemberException;
 import org.choongang.global.configs.DBConn;
 import org.choongang.global.exceptions.BadRequestException;
 import org.choongang.member.controllers.RequestJoin;
 import org.choongang.member.entities.Member;
+import org.choongang.member.exceptions.DuplicatedMemberException;
 import org.choongang.member.mapper.MemberMapper;
-import org.choongang.member.servies.JoinService;
-import org.choongang.member.servies.MemberServiceProvider;
+import org.choongang.member.services.JoinService;
+import org.choongang.member.services.MemberServiceProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,20 +36,19 @@ public class JoinServiceTest {
     RequestJoin getData() {
         Faker faker = new Faker(Locale.ENGLISH);
 
-        RequestJoin form = RequestJoin.builder()
+        RequestJoin form =  RequestJoin.builder()
                 .email(System.currentTimeMillis() + faker.internet().emailAddress())
                 .password(faker.regexify("\\w{8}").toLowerCase())
                 .userName(faker.name().fullName())
                 .termsAgree(true)
                 .build();
-
-        form.setConfirmPassword(form.getConfirmPassword());
+        form.setConfirmPassword(form.getPassword());
 
         return form;
     }
 
     @Test
-    @DisplayName("회원가입 성공시")
+    @DisplayName("회원가입 성공시 예외가 발생하지 않음")
     void successTest() {
         RequestJoin form = getData();
         assertDoesNotThrow(() -> {
@@ -81,32 +80,32 @@ public class JoinServiceTest {
         BadRequestException thrown = assertThrows(BadRequestException.class, () -> {
             RequestJoin form = getData();
             if (field.equals("email")) {
-                form.setEmail(isNull?null:"   ");
+                form.setEmail(isNull?null:"    ");
             } else if (field.equals("password")) {
-                form.setPassword(isNull?null:"   ");
+                form.setPassword(isNull?null:"    ");
             } else if (field.equals("confirmPassword")) {
-                form.setConfirmPassword(isNull?null:"   ");
+                form.setConfirmPassword(isNull?null:"    ");
             } else if (field.equals("userName")) {
-                form.setUserName(isNull?null:"   ");
+                form.setUserName(isNull?null:"     ");
             } else if (field.equals("termsAgree")) {
                 form.setTermsAgree(false);
             }
 
             service.process(form);
 
-        }, field + "테스트");
+        }, field + " 테스트");
 
-    String message = thrown.getMessage();
-    assertTrue(message.contains(keyword), field + "키워드 테스트");
+        String message = thrown.getMessage();
+        assertTrue(message.contains(keyword), field + " 키워드 테스트");
     }
 
     @Test
     @DisplayName("비밀번호와 확인이 일치하지 않으면 BadRequestException 발생")
     void passwordMismatchTest() {
         BadRequestException thrown = assertThrows(BadRequestException.class, () -> {
-           RequestJoin form = getData();
-           form.setConfirmPassword(form.getPassword() + "**");
-           service.process(form);
+            RequestJoin form = getData();
+            form.setConfirmPassword(form.getPassword() + "**");
+            service.process(form);
         });
 
         String message = thrown.getMessage();
@@ -118,7 +117,7 @@ public class JoinServiceTest {
     void emailPatternTest() {
         BadRequestException thrown = assertThrows(BadRequestException.class, () -> {
             RequestJoin form = getData();
-            form.setEmail("*****");
+            form.setEmail("******");
             service.process(form);
         });
 
@@ -130,14 +129,15 @@ public class JoinServiceTest {
     @DisplayName("비밀번호 자리수가 8자리 미만이면 BadRequestException 발생")
     void passwordLengthTest() {
         BadRequestException thrown = assertThrows(BadRequestException.class, () -> {
-           Faker faker = new Faker();
-           RequestJoin form = getData();
-           form.setPassword(faker.regexify("\\w{3,7}").toLowerCase());
-           form.setConfirmPassword(form.getPassword());
+            Faker faker = new Faker();
+            RequestJoin form = getData();
+            form.setPassword(faker.regexify("\\w{3,7}").toLowerCase());
+            form.setConfirmPassword(form.getPassword());
             service.process(form);
         });
 
         String message = thrown.getMessage();
+
         assertTrue(message.contains("8자리 이상"));
     }
 
@@ -145,11 +145,10 @@ public class JoinServiceTest {
     @DisplayName("이미 가입된 메일인 경우 DuplicatedMemberException 발생")
     void duplicateEmailTest() {
         MemberServiceProvider provider = MemberServiceProvider.getInstance();
-        assertThrows(DuplicateMemberException.class, () -> {
+        assertThrows(DuplicatedMemberException.class, () -> {
             RequestJoin form = getData();
             provider.joinService().process(form);
             provider.joinService().process(form);
         });
-
     }
 }
