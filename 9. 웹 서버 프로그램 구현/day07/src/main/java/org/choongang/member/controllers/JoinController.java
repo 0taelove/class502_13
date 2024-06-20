@@ -14,6 +14,8 @@ import org.choongang.member.services.MemberServiceProvider;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import static org.choongang.global.MessageUtil.alertError;
+
 @WebServlet("/member/join")
 public class JoinController extends HttpServlet {
     @Override
@@ -32,11 +34,8 @@ public class JoinController extends HttpServlet {
             JoinService service = MemberServiceProvider.getInstance().joinService();
             service.process(req);
         } catch (CommonException e) {
-            // 브라우저에게 contentType 형식을 알려줘야 됨
-            resp.setContentType("text/html; charset=UTF-8");
-            resp.setStatus(e.getStatus());
-            PrintWriter out = resp.getWriter();
-            out.printf("<script>alert('%s');</script>", e.getMessage());
+            // 1번째 매개변수로 e, 2번째 매개변수로 resp
+            alertError(e, resp);
         }
         JoinService service = MemberServiceProvider.getInstance().joinService();
 
