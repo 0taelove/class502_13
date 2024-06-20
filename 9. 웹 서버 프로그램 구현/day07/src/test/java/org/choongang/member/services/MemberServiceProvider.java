@@ -41,7 +41,7 @@ public class MemberServiceProvider {
     }
 
     public LoginValidator loginValidator() {
-        return new LoginValidator();
+        return new LoginValidator(memberMapper());
     }
 
     // 객체 조립기를 통해 테스트 전에 객체를 불러올 수 있도록 설정
