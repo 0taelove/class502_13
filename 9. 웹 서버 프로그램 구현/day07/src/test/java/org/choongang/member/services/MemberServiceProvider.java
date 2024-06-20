@@ -22,10 +22,14 @@ public class MemberServiceProvider {
         return instance;
     }
 
+    //rollback 기능
+    public SqlSession getSession() {
+        return DBConn.getSession();
+    }
+
     // 의존 객체 MemberMapper 주입
     public MemberMapper memberMapper() {
-        SqlSession session = DBConn.getSession();
-        return session.getMapper(MemberMapper.class);
+        return getSession().getMapper(MemberMapper.class);
     }
 
     public JoinValidator joinValidator() {

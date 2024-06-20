@@ -27,6 +27,10 @@ public class DBConn {
 
     // 바로 커밋할 수 있게 설정
     public static SqlSession getSession(boolean autoCommit) {
+        // rollback 기능
+        String mode = System.getenv("mode");
+        if (mode != null && mode.equals("test")) autoCommit = false;
+
         return factory.openSession(autoCommit);
     }
 
