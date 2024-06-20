@@ -2,6 +2,7 @@ package org.choongang.member.tests;
 
 import com.github.javafaker.Faker;
 import jakarta.servlet.http.HttpServletRequest;
+import org.choongang.global.exceptions.BadRequestException;
 import org.choongang.member.services.LoginService;
 import org.choongang.member.services.MemberServiceProvider;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,11 +38,21 @@ public class LoginServiceTest {
         // 가짜 데이터 영어로 생성
         faker = new Faker(Locale.ENGLISH);
 
+        // 검증할 때 1번 호출
+        setData();
+    }
+
+    // 데이터를 초기화 할 필요가 있음
+    // 분리한 이유 -> 비번 검증시 이메일 필요.. 값 초기화 -> 교체 목적
+    void setData() {
         setParam("email", faker.internet().emailAddress());
         setParam("password", faker.regexify("\\w{8}").toLowerCase());
     }
 
     // 가짜 데이터
+    // 사용자 요청한 데이터가 들어와야 함
+    // getattribute -> 서버가 보내주는 데이터 - 속성, 뷰 출력 목적
+    // getparameter -> 사용자가 보내주는 데이터
     void setParam(String name, String value) {
         given(request.getParameter(name)).willReturn(value);
     }
@@ -52,15 +63,35 @@ public class LoginServiceTest {
     // assertDoesNotThrow 내가 테스트하는 코드가 오류가 있는지 없는지를 테스트
     // 람다식으로 정의
     assertDoesNotThrow(() -> {
-            loginService.process();
+            loginService.process(request);
         });
     }
 
     @Test
     @DisplayName("필수 입력 항목(이메일, 비밀번호) 검증, 검증 실패시 BadRequestException 발생")
     void requiredFieldTest() {
-        // 사용자 요청한 데이터가 들어와야 함
-        // getattribute -> 서버가 보내주는 데이터 - 속성, 뷰 출력 목적
-        // getparameter -> 사용자가 보내주는 데이터
+        assertAll(
+                () -> requiredEachFieldTest("email", false, "이메일"),
+                () -> requiredEachFieldTest("email", true, "이메일"),
+                () -> requiredEachFieldTest("password", false, "비밀번호"),
+                () -> requiredEachFieldTest("password", true, "비밀번호")
+        );
+
+    }
+
+    void requiredEachFieldTest(String name, boolean isNull, String message) {
+        setData(); // 이메일과 비밀번호가 들어갈 수 있게 초기화
+        BadRequestException thrown = assertThrows(BadRequestException.class, () -> {
+            if (name.equals("password")) {
+                setParam("password", isNull ? null : "   ");
+            } else { // 이메일
+                setParam("email", isNull ? null : "   ");
+            }
+
+            loginService.process(request);
+        }, name + " 테스트 ");
+
+        String msg = thrown.getMessage();
+        assertTrue(msg.contains(message), name + ", 키워드:" + message + "테스트");
     }
 }

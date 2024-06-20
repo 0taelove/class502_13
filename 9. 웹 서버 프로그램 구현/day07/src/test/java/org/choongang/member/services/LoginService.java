@@ -1,7 +1,9 @@
 package org.choongang.member.services;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 public class LoginService {
-    public void process() {
+    public void process(HttpServletRequest request) {
 
     }
 }
