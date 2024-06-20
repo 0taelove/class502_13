@@ -119,6 +119,9 @@ public class LoginServiceTest {
     @Test
     @DisplayName("이메일로 회원이 조회되는지 검증, 검증 실패시 BadRequestException 발생")
     void memberExistTest() {
-
+        setParam("email", "****" + form.getEmail());
+        BadRequestException thrown = assertThrows(BadRequestException.class, () -> {
+            loginService.process(request);
+        });
     }
 }
