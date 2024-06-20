@@ -1,5 +1,6 @@
 package org.choongang.member.tests;
 
+import com.github.javafaker.Faker;
 import jakarta.servlet.http.HttpServletRequest;
 import org.choongang.member.services.LoginService;
 import org.choongang.member.services.MemberServiceProvider;
@@ -10,19 +11,39 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Locale;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("로그인 기능 테스트")
 public class LoginServiceTest {
 
     private LoginService loginService;
+    // faker 객체 자주 사용할 거 같아서 모의 객체 faker 생성
+    private Faker faker;
+
+    // 가짜 데이터
+    @Mock
+    private HttpServletRequest request;
 
     // 매번 테스트시마다 객체를 생성하지 않게 테스트 전 공통자원으로 설정
     // 객체 조립기를 통해 테스트 전에 객체를 불러올 수 있도록 설정 -> MemberServiceProvider쪽에서
     @BeforeEach
     void init() {
         loginService = MemberServiceProvider.getInstance().loginService();
+
+        // 가짜 데이터 영어로 생성
+        faker = new Faker(Locale.ENGLISH);
+
+        setParam("email", faker.internet().emailAddress());
+        setParam("password", faker.regexify("\\w{8}").toLowerCase());
+    }
+
+    // 가짜 데이터
+    void setParam(String name, String value) {
+        given(request.getParameter(name)).willReturn(value);
     }
 
     @Test
