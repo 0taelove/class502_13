@@ -1,7 +1,5 @@
 package org.choongang.global.validators;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 // 필수 항목 검증이 제일 많아서 공통적인 인터페이스로 정의
 // 값이 있는지 없는지 체크
 public interface RequiredValidator {
@@ -17,6 +15,4 @@ public interface RequiredValidator {
             throw e;
         }
     }
-
-    void check(HttpServletRequest form);
 }

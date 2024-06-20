@@ -1,6 +1,5 @@
 package org.choongang.member.validators;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.choongang.global.exceptions.BadRequestException;
 import org.choongang.global.validators.EmailValidator;
 import org.choongang.global.validators.RequiredValidator;
@@ -47,10 +46,5 @@ public class JoinValidator implements Validator<RequestJoin>, RequiredValidator,
 
         // 이미 가입된 회원인지 체크
         checkTrue(mapper.exist(email) == 0L, new DuplicatedMemberException());
-    }
-
-    @Override
-    public void check(HttpServletRequest form) {
-
     }
 }
