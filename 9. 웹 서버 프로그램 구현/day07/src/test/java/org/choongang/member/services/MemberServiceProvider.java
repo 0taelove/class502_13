@@ -34,4 +34,9 @@ public class MemberServiceProvider {
     public org.choongang.member.services.JoinService joinService() {
         return new org.choongang.member.services.JoinService(joinValidator(), memberMapper());
     }
+
+    // 객체 조립기를 통해 테스트 전에 객체를 불러올 수 있도록 설정
+    public LoginService loginService() {
+        return new LoginService();
+    }
 }
