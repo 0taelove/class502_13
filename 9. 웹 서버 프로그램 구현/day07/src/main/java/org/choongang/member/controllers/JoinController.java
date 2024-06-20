@@ -7,6 +7,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.choongang.member.services.JoinService;
+import org.choongang.member.services.MemberServiceProvider;
 
 import java.io.IOException;
 
@@ -21,8 +23,13 @@ public class JoinController extends HttpServlet {
         rd.forward(req, resp);
     }
 
+    // doGet에서 날아온 데이터 -> service를 doPost에 추가
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        JoinService service = MemberServiceProvider.getInstance().joinService();
 
+        // 매개변수로 req 사용 -> 실제 요청데이터는 req에 있으니 가공해서 사용하겠다는 의미
+        // service 데이터 -> controller로 유입(사용자 요청 데이터 req에 있음)
+        service.process(req);
     }
 }
