@@ -2,6 +2,7 @@ package org.choongang.member.tests;
 
 import com.github.javafaker.Faker;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.apache.ibatis.session.SqlSession;
 import org.choongang.global.exceptions.BadRequestException;
 import org.choongang.member.controllers.RequestJoin;
@@ -15,13 +16,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.only;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @DisplayName("로그인 기능 테스트")
 public class LoginServiceTest {
 
@@ -37,6 +44,10 @@ public class LoginServiceTest {
     // 가짜 데이터
     @Mock
     private HttpServletRequest request;
+
+    // session : 웹 사이트의 여러 페이지에 걸쳐 사용되는 사용자 정보를 저장하는 방법을 의미
+    @Mock
+    private HttpSession session;
 
     // 매번 테스트시마다 객체를 생성하지 않게 테스트 전 공통자원으로 설정
     // 객체 조립기를 통해 테스트 전에 객체를 불러올 수 있도록 설정 -> MemberServiceProvider쪽에서
@@ -66,6 +77,8 @@ public class LoginServiceTest {
 
         // 검증할 때 1번 호출
         setData();
+
+        given(request.getSession()).willReturn(session);
     }
 
     // 데이터를 초기화 할 필요가 있음
@@ -92,6 +105,9 @@ public class LoginServiceTest {
     assertDoesNotThrow(() -> {
             loginService.process(request);
         });
+
+        // 로그인 처리 완료시 HttpSession - setAttribute 메서드가 호출 됨
+        then(session).should(only()).setAttribute(any(), any());
     }
 
     @Test
