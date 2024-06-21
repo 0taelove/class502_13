@@ -10,6 +10,7 @@ import org.apache.commons.fileupload2.core.DiskFileItem;
 import org.apache.commons.fileupload2.jakarta.servlet6.JakartaServletDiskFileUpload;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 // 서블릿을 구현하기 위해서는 HttpServlet 추상 클래스를 상속받아야 한다
@@ -30,7 +31,9 @@ public class FileUploadController extends HttpServlet {
 
             if (item.isFormField()) { // 일반 텍스트 형태의 양식 데이터
                 // subject, content
-
+                String name = item.getFieldName();
+                String value = item.getString(Charset.forName("UTF-8"));
+                System.out.printf("name=%s, value=%s%n", name, value);
             } else { // 파일 데이터 - file
 
             }
