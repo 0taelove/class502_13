@@ -10,6 +10,10 @@ public class CommonRequestWrapper extends HttpServletRequestWrapper {
     public CommonRequestWrapper(ServletRequest req) {
         super((HttpServletRequest) req); // 형변환
 
+        // 상위 클래스 ServletRequestWrapper
+        // 하위 클래스 HttpServletRequest
+        // 상위 -> 하위 형변환시 명시필요
+        // 자료형이 달라서 형변환을 해주었다고 생감
         HttpServletRequest request = (HttpServletRequest) req;
 
         /* 로그인 상태, 로그인 회원 정보 전역 유지 */
