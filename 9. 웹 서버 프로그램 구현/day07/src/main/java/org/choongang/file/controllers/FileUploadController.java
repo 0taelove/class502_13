@@ -27,6 +27,7 @@ public class FileUploadController extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         JakartaServletDiskFileUpload upload = new JakartaServletDiskFileUpload();
         // multipart 형식 body 데이터를 일반 양식과 파일 데이터로 분리해서 조회 가능한 List 형태로 변환
+        // parseRequest가 중요 -> FileItem 형식으로 변환 -> 브라우저에서 형식 인식
         List<DiskFileItem> items = upload.parseRequest(req);
         for (DiskFileItem item : items) {
 
