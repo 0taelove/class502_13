@@ -3,6 +3,7 @@ package org.choongang.member.controllers;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,7 +31,21 @@ public class LoginController extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             LoginService service = MemberServiceProvider.getInstance().loginService();
-            service.process(req);
+            service.process(req); // 여기서 예외 발생시 하단 코드 실행 안 되고 catch로 유입,, 그 반대면 하단 코드 실행(이상 없다는 것 - 로그인이 잘 이루어짐)
+
+            /* 이메일 기억하기 처리 S */
+            // 쿠키는 암호화가 필요하기 때문에 단순 쿠키 사용은 불안정하지만 배우는 단계이므로 작성해보는 이메일 쿠키 저장 기능
+            String email = req.getParameter("email");
+            Cookie cookie = new Cookie("saveEmail", email);
+            if (req.getParameter("saveEmail") != null) { // 이메일 기억하기 체크
+                // 7일간 기억하기
+                cookie.setMaxAge(60 * 60 * 24 * 7);
+            } else { // 체크 해제 - 쿠키 제거
+                cookie.setMaxAge(0);
+
+            }
+                resp.addCookie(cookie);
+            /* 이메일 기억하기 처리 E */
 
             go(req.getContextPath() + "/", "parent", resp);
         } catch (CommonException e) {
