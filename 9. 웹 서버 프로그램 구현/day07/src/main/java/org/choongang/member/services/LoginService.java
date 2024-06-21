@@ -25,6 +25,8 @@ public class LoginService {
         String email = request.getParameter("email");
         Member member = mapper.get(email);
 
+        // 나만 내 로그인 정보를 활용 가능 -> 세션에 member 값 저장되어 있으면 로그인 상태
+        // index.jsp의 sessionScope.member의 기능
         HttpSession session = request.getSession();
         session.setAttribute("member", member);
     }
