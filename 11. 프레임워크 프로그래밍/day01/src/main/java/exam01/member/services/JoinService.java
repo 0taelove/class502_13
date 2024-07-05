@@ -18,7 +18,7 @@ public class JoinService {
 
 
     @Autowired
-    @Qualifier("memberDao")
+    @Qualifier("mDao")
     private MemberDao memberDao;
 
     /*

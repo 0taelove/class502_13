@@ -12,7 +12,7 @@ public class InfoService {
     private MemberDao memberDao;
 
     @Autowired
-    @Qualifier("memberDao")
+    @Qualifier("mDao")
     public void setMemberDao(Optional<MemberDao> opt) {
         this.memberDao = opt.get();
     }
