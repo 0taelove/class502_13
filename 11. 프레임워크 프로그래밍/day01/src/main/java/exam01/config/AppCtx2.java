@@ -16,6 +16,11 @@ public class AppCtx2 {
     }
 
     @Bean
+    public MemberDao memberDao2() {
+        return new MemberDao();
+    }
+
+    @Bean
     public JoinValidator joinValidator() {
         JoinValidator joinValidator = new JoinValidator();
         // joinValidator.setMemberDao(memberDao());
