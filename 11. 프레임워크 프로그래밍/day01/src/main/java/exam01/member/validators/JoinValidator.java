@@ -12,7 +12,6 @@ public class JoinValidator implements Validator<RequestJoin> {
 
     @Autowired
     @Qualifier("memberDao")
-
     public void setMemberDao(MemberDao memberDao) {
         this.memberDao = memberDao;
     }
