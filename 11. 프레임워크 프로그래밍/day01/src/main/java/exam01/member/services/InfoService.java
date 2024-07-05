@@ -5,13 +5,14 @@ import exam01.member.entities.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 public class InfoService {
     private MemberDao memberDao;
 
     @Autowired
-    public void setMemberDao(MemberDao memberDao) {
-        this.memberDao = memberDao;
+    public void setMemberDao(Optional<MemberDao> opt) {
+        this.memberDao = opt.get();
     }
 
     public void printList() {
