@@ -18,7 +18,7 @@ public class AppCtx2 {
     @Bean
     public JoinValidator joinValidator() {
         JoinValidator joinValidator = new JoinValidator();
-        joinValidator.setMemberDao(memberDao());
+        // joinValidator.setMemberDao(memberDao());
 
         return joinValidator;
     }
@@ -32,7 +32,7 @@ public class AppCtx2 {
     @Bean
     public InfoService infoService() {
         InfoService infoService = new InfoService();
-        infoService.setMemberDao(memberDao());
+        // infoService.setMemberDao(memberDao());
 
         return infoService;
     }
